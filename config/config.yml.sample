@@ -1,0 +1,10 @@
+# invite URL
+# 3072 <--- read / send messages
+# https://discord.com/oauth2/authorize?client_id=<app-id>&scope=bot&permissions=3072
+
+#API token
+bot_token: xxxxxxxxxxxxxxxx
+
+# restrictions
+message_channels: [ 'message_reply_channel', 'command_setting_channel' ]
+command_channels: [ 'command_setting_channel' ]
