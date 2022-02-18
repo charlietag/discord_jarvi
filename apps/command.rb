@@ -35,6 +35,9 @@ def print_help
   message += %{ currect_msg: congras! the answer is a\n }
   message += %{ error_msg: sorry, the answer is not in the options...\n }
   message += "--------------\n"
+  message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
+  message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
+  message += "--------------\n"
 end
 
 # bot = Discordrb::Commands::CommandBot.new token: bot_token, prefix: '!'
