@@ -82,3 +82,14 @@ Type commands in discord chat channel. And only 3 commands here
 ```bash
 /set_ans "e a b c d" "Correct MSG: Congras! the answer is e" "Fail MSG: Sorry, you are trying blind guess..."
 ```
+
+**Scenario**
+
+* Success
+  * Match correct_option more than once, **no wrong_options** included
+  * case insensitive
+* Fail
+  * Match wrong_options more than twice, even correct_option is included
+* No response
+  * Does not match correct_option
+  * Only match wrong_options once
