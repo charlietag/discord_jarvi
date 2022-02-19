@@ -93,3 +93,15 @@ Type commands in discord chat channel. And only 3 commands here
 * No response
   * Does not match correct_option
   * Only match wrong_options once
+
+# Useful Regex Tools
+
+Tester online
+
+* [regexr.com](https://regexr.com/)
+* [regex101.com](https://regex101.com/r/hgfjD5/1)
+
+Regular Expression Visualizer
+
+* [jex.im](https://jex.im/regulex/#!flags=&re=(%3F%3A(%3F!false%7Cnull).)*(true)%2B(%3F%3A(%3F!false%7Cnull).)*)
+* [regexper.com](https://regexper.com/#%28%3F%3A%28%3F!false%7Cnull%29.%29*%28true%29%2B%28%3F%3A%28%3F!false%7Cnull%29.%29*)
