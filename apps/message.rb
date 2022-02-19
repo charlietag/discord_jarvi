@@ -44,7 +44,7 @@ File.open($today_pid,  "w")  {  |f|  f.write  jarvis_pid }
 # -------- Content match ------------
 bot = Discordrb::Bot.new token: $bot_token
 
-bot.message(with_text: /(^#{today_fail})*(#{today_ans})+(^#{today_fail})*/i) do |event|
+bot.message(with_text: /[^(#{today_fail})]*(#{today_ans})+[^(#{today_fail})]*/i) do |event|
   # source_files
   if today_answered != 'y'
     event.respond today_ans_msg
