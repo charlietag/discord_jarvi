@@ -17,15 +17,15 @@ script = Filelock.new
 # show help
 #-----------------------------
 def print_help
-  message = "--------------\n"
-  message += %{ /set_ans "a b c d" "congras! the answer is a" "sorry, the answer is not in the options..."\n }
-  message += %{ a(correct)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n }
-  message += %{ currect_msg: congras! the answer is a\n }
-  message += %{ error_msg: sorry, the answer is not in the options...\n }
-  message += "--------------\n"
+  message = "------------- Usage -------------\n"
+  message += %{ /set_ans "e a b c d"   "Correct MSG: Congras! the answer is e"   "Fail MSG: Sorry, you are just trying blind guess..."\n\n }
+  message += %{ e(correct)\n  a(wrong)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n\n }
+  message += %{ Correct MSG: Congras! the answer is e\n }
+  message += %{ Fail MSG: Sorry, you are just trying blind guess...\n }
+  message += "--------------------------------\n"
   message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
   message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
-  message += "--------------\n"
+  message += "------------- Usage ------------\n"
 end
 
 #-----------------------------
@@ -81,10 +81,10 @@ bot.command :set_ans do |_event, *args|
     # ----------------------------------------------------------
     # display extracted discord input
     # ----------------------------------------------------------
-    display_msg =  "ANS: #{yes_option}\n"
-    display_msg += "Fail: #{no_options.join(" ")}\n"
-    display_msg += "ANS Message: #{yes_msg}\n"
-    display_msg += "Fails Message: #{mess_msg}\n"
+    display_msg =  "CORRECT OPTION: #{yes_option}\n"
+    display_msg += "WRONG OPTIONS: #{no_options.join(" ")}\n\n"
+    display_msg += "Correct Message: #{yes_msg}\n"
+    display_msg += "Wrong Message: #{mess_msg}\n"
 
     # _event.respond "#{_event.channel.name}: #{args.join(' ')}"
     _event.respond display_msg
@@ -102,6 +102,36 @@ bot.command :set_ans do |_event, *args|
 
     res = spawn("#{message_event}")
 
+  end
+end
+
+# --- command: get_status ---
+bot.command :get_status do |event|
+  if $command_channels.include? event.channel.name
+    display_msg = "Nothing happened here..."
+
+    if File.file?($newbie_answered)
+      # ----------------------------------------------------------
+      # Fetch info from dat files
+      # ----------------------------------------------------------
+      newbie_ans      = File.read($newbie_ans)
+      newbie_fail     = File.read($newbie_fail)
+      newbie_ans_msg  = File.read($newbie_ans_msg)
+      newbie_fail_msg = File.read($newbie_fail_msg)
+
+      newbie_answered = File.read($newbie_answered)
+
+      # ----------------------------------------------------------
+      # display extracted discord input
+      # ----------------------------------------------------------
+      display_msg =  "CORRECT OPTION: #{newbie_ans}\n"
+      display_msg += "WRONG OPTIONS: #{newbie_fail}\n\n"
+      display_msg += "Correct Message: #{newbie_ans_msg}\n"
+      display_msg += "Wrong Message: #{newbie_fail_msg}\n\n"
+      display_msg += "Answer is answered: #{newbie_answered}\n"
+    end
+
+    event.respond display_msg
   end
 end
 
