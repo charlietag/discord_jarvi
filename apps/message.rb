@@ -40,7 +40,11 @@ bot = Discordrb::Bot.new token: $bot_token
 # ------------
 # correct
 # ------------
-bot.message(with_text: /[^(#{newbie_fail})]*(#{newbie_ans})+[^(#{newbie_fail})]*/i) do |event|
+# bot.message(with_text: /[^(#{newbie_fail})]*(#{newbie_ans})+[^(#{newbie_fail})]*/i) do |event|
+# same as
+# bot.message(with_text: /[^#{newbie_fail}]*(#{newbie_ans})+[^#{newbie_fail}]*/i) do |event|
+
+bot.message(with_text: /(?:(?!#{newbie_fail}).)*(#{newbie_ans})+(?:(?!#{newbie_fail}).)*/i) do |event|
 
   # ---------------------------------------------
   # show only when correct answer is not been chosen
@@ -63,7 +67,7 @@ end
 # ------------
 # correct
 # ------------
-bot.message(with_text: /(#{newbie_fail}| ){2,}/i) do |event|
+bot.message(with_text: /(.*(#{newbie_fail})+.*){2,}/i) do |event|
   # ---------------------------------------------
   # show only when correct answer is not been chosen
   # ---------------------------------------------
