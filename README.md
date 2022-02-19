@@ -1,4 +1,6 @@
-### Try to build a discord bot using `ruby` and `gem: "discordrb"`
+# Discord Jarvis
+
+Try to build a discord bot using `ruby` and `gem: "discordrb"` (https://github.com/shardlab/discordrb)
 
 # Environment
 
