@@ -1,10 +1,10 @@
-# invite URL
+# Invite URL
 # 3072: only read / send messages permission
-# https://discord.com/oauth2/authorize?client_id={app-id}&scope=bot&permissions=3072
+# https://discord.com/oauth2/authorize?client_id={application-id}&scope=bot&permissions=3072
 
-#API token
-bot_token: xxxxxxxxxxxxxxxx
+# BOT token
+bot_token: 999999999999999999
 
-# restrictions
-message_channels: [ 'message_reply_channel', 'command_setting_channel' ]
-command_channels: [ 'command_setting_channel' ]
+# Restrictions
+message_channels: [ 'message_autoreply_channel_name', 'command_setting_channel_name' ]
+command_channels: [ 'command_setting_channel_name' ]
