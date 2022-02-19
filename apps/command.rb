@@ -1,6 +1,4 @@
 #!/bin/env ruby
-
-
 require_relative '../libs/discord_jarvis.rb'
 
 
@@ -10,24 +8,14 @@ require_relative '../libs/discord_jarvis.rb'
 script = Filelock.new
 # script.lock
 
-# File.open($today_ans,       "w")  {  |f|  f.write  "a"        }
-# File.open($today_fail,      "w")  {  |f|  f.write  "b c d"      }
-# File.open($today_ans_msg,   "w")  {  |f|  f.write  "correct"  }
-# File.open($today_fail_msg,  "w")  {  |f|  f.write  "error"    }
-# File.open($today_answered,  "w")  {  |f|  f.write  "y"        }
 #-----------------------------
 # Script unlock
 #-----------------------------
 # script.unlock
 
-# puts $today_ans
-# puts $today_fail
-# puts $today_ans_msg
-# puts $today_fail_msg
-# puts $today_answed
-# exit
-
-# -------- Command ------------
+#-----------------------------
+# show help
+#-----------------------------
 def print_help
   message = "--------------\n"
   message += %{ /set_ans "a b c d" "congras! the answer is a" "sorry, the answer is not in the options..."\n }
@@ -40,7 +28,9 @@ def print_help
   message += "--------------\n"
 end
 
-# bot = Discordrb::Commands::CommandBot.new token: bot_token, prefix: '!'
+#-----------------------------
+# define command
+#-----------------------------
 bot = Discordrb::Commands::CommandBot.new token: $bot_token, prefix: '/'
 
 # bot.command :user do |event|
@@ -51,15 +41,20 @@ bot = Discordrb::Commands::CommandBot.new token: $bot_token, prefix: '/'
 #   event.channel.name
 # end
 
+# --- command: help ---
 bot.command :help do |event|
   if $command_channels.include? event.channel.name
     event.respond print_help
   end
 end
 
+# --- command: set_ans ---
 bot.command :set_ans do |_event, *args|
   if $command_channels.include? _event.channel.name
 
+    # ----------------------------------------------------------
+    # extract discord input
+    # ----------------------------------------------------------
     first_arr = args.join(" ").split('" "').first.gsub(/"/,'').split(" ").uniq
     second_msg = args.join(" ").split('" "').pop(2).first.gsub(/"/,'')
     third_msg = args.join(" ").split('" "').pop(2).pop.gsub(/"/,'')
@@ -70,16 +65,22 @@ bot.command :set_ans do |_event, *args|
     yes_msg = second_msg
     mess_msg = third_msg
 
+    # ----------------------------------------------------------
+    # save extracted discord input
+    # ----------------------------------------------------------
     script.lock
 
-    File.open($today_ans,       "w")  {  |f|  f.write  "#{yes_option}"       }
-    File.open($today_fail,      "w")  {  |f|  f.write  "#{no_options.join("  ")}"  }
-    File.open($today_ans_msg,   "w")  {  |f|  f.write  "#{yes_msg}"          }
-    File.open($today_fail_msg,  "w")  {  |f|  f.write  "#{mess_msg}"         }
-    File.open($today_answered,  "w")  {  |f|  f.write  "n"                   }
+    File.open($newbie_ans,       "w")  {  |f|  f.write  "#{yes_option}"       }
+    File.open($newbie_fail,      "w")  {  |f|  f.write  "#{no_options.join("  ")}"  }
+    File.open($newbie_ans_msg,   "w")  {  |f|  f.write  "#{yes_msg}"          }
+    File.open($newbie_fail_msg,  "w")  {  |f|  f.write  "#{mess_msg}"         }
+    File.open($newbie_answered,  "w")  {  |f|  f.write  "n"                   }
 
     script.unlock
 
+    # ----------------------------------------------------------
+    # display extracted discord input
+    # ----------------------------------------------------------
     display_msg =  "ANS: #{yes_option}\n"
     display_msg += "Fail: #{no_options.join(" ")}\n"
     display_msg += "ANS Message: #{yes_msg}\n"
@@ -89,10 +90,15 @@ bot.command :set_ans do |_event, *args|
     _event.respond display_msg
 
 
+    # ----------------------------------------------------------
+    # register messege event by forking message.rb
+    # ----------------------------------------------------------
     message_event = File.dirname(__FILE__) + "/message.rb"
 
-    message_pid = File.read($today_pid)
-    res = spawn("/usr/bin/kill  #{message_pid}")
+    if File.file?($newbie_pid)
+      message_pid = File.read($newbie_pid)
+      res = spawn("/usr/bin/kill  #{message_pid}")
+    end
 
     res = spawn("#{message_event}")
 

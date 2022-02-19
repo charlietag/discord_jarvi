@@ -18,13 +18,13 @@ $command_channels = configs['command_channels']
 #-----------------------------
 tmp_dir        = File.dirname(__FILE__) + "/../tmp"
 # today_date     = Time.now.strftime("%Y-%m-%d")
-today_date     = "newbie"
+prefix     = "newbie"
 
-$today_ans      = "#{tmp_dir}/#{today_date}_ans.dat"
-$today_fail     = "#{tmp_dir}/#{today_date}_fail.dat"
-$today_ans_msg  = "#{tmp_dir}/#{today_date}_ans_msg.dat"
-$today_fail_msg = "#{tmp_dir}/#{today_date}_fail_msg.dat"
+$newbie_ans      = "#{tmp_dir}/#{prefix}_ans.dat"
+$newbie_fail     = "#{tmp_dir}/#{prefix}_fail.dat"
+$newbie_ans_msg  = "#{tmp_dir}/#{prefix}_ans_msg.dat"
+$newbie_fail_msg = "#{tmp_dir}/#{prefix}_fail_msg.dat"
 
-$today_pid = "#{tmp_dir}/#{today_date}_pid.dat"
+$newbie_pid      = "#{tmp_dir}/#{prefix}_pid.dat"
 
-$today_answered   = "#{tmp_dir}/#{today_date}_answered.dat"
+$newbie_answered = "#{tmp_dir}/#{prefix}_answered.dat"
