@@ -124,11 +124,11 @@ bot.command :get_status do |event|
       # ----------------------------------------------------------
       # display extracted discord input
       # ----------------------------------------------------------
-      display_msg =  "CORRECT OPTION: #{newbie_ans}\n"
-      display_msg += "WRONG OPTIONS: #{newbie_fail}\n\n"
+      display_msg =  "Correct Option: #{newbie_ans}\n"
+      display_msg += "Wrong Options: #{newbie_fail}\n\n"
       display_msg += "Correct Message: #{newbie_ans_msg}\n"
       display_msg += "Wrong Message: #{newbie_fail_msg}\n\n"
-      display_msg += "Answer is answered: #{newbie_answered}\n"
+      display_msg += "Answer is used: #{newbie_answered}\n"
     end
 
     event.respond display_msg
