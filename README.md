@@ -71,7 +71,9 @@ $ ./start.sh
 Type commands in discord chat channel. And only 3 commands here
 
 `/help`       - show the help
+
 `/set_ans`    - Setup and register the message event
+
 `/get_status` - Get the setting and using status
 
 
