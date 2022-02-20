@@ -52,10 +52,21 @@ Setup the config
 ```bash
 $ vim config/config.yml
 
-#API token
+# -------------------------------------
+#             BOT token
+# -------------------------------------
 bot_token: 999999999999999999
 
-# restrictions
+# -------------------------------------
+#           Restrictions
+# -------------------------------------
+# --- activate in servers ---
+
+# activated_servers: [ 'server_name_1', 'server_name_2' ]
+activated_servers: [ 'server_name_1' ]
+
+# --- activate in channels ---
+
 message_channels: [ 'message_autoreply_channel_name', 'command_setting_channel_name' ]
 command_channels: [ 'command_setting_channel_name' ]
 ```

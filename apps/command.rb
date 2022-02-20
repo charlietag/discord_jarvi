@@ -33,105 +33,129 @@ end
 #-----------------------------
 bot = Discordrb::Commands::CommandBot.new token: $bot_token, prefix: '/'
 
+# ---------- Sample ---------
 # bot.command :user do |event|
-#   event.user.name
+#   if $activated_servers.include? event.server.name
+#     if $command_channels.include? event.channel.name
+#       event.user.name
+#     end
+#   end
 # end
-
+#
 # bot.command :channel do |event|
-#   event.channel.name
+#   if $activated_servers.include? event.server.name
+#     if $command_channels.include? event.channel.name
+#       event.channel.name
+#     end
+#   end
 # end
+#
+# bot.command :server do |event|
+#   if $activated_servers.include? event.server.name
+#     if $command_channels.include? event.channel.name
+#       event.server.name
+#     end
+#   end
+# end
+# ---------- Sample ---------
 
 # --- command: help ---
 bot.command :help do |event|
-  if $command_channels.include? event.channel.name
-    event.respond print_help
+  if $activated_servers.include? event.server.name
+    if $command_channels.include? event.channel.name
+      event.respond print_help
+    end
   end
 end
 
 # --- command: set_ans ---
 bot.command :set_ans do |_event, *args|
-  if $command_channels.include? _event.channel.name
+  if $activated_servers.include? _event.server.name
+    if $command_channels.include? _event.channel.name
 
-    # ----------------------------------------------------------
-    # extract discord input
-    # ----------------------------------------------------------
-    first_arr = args.join(" ").split('" "').first.gsub(/"/,'').split(" ").uniq
-    second_msg = args.join(" ").split('" "').pop(2).first.gsub(/"/,'')
-    third_msg = args.join(" ").split('" "').pop(2).pop.gsub(/"/,'')
+      # ----------------------------------------------------------
+      # extract discord input
+      # ----------------------------------------------------------
+      first_arr = args.join(" ").split('" "').first.gsub(/"/,'').split(" ").uniq
+      second_msg = args.join(" ").split('" "').pop(2).first.gsub(/"/,'')
+      third_msg = args.join(" ").split('" "').pop(2).pop.gsub(/"/,'')
 
-    yes_option = first_arr.first
-    no_options = first_arr - yes_option.split
+      yes_option = first_arr.first
+      no_options = first_arr - yes_option.split
 
-    yes_msg = second_msg
-    mess_msg = third_msg
+      yes_msg = second_msg
+      mess_msg = third_msg
 
-    # ----------------------------------------------------------
-    # save extracted discord input
-    # ----------------------------------------------------------
-    script.lock
+      # ----------------------------------------------------------
+      # save extracted discord input
+      # ----------------------------------------------------------
+      script.lock
 
-    File.open($newbie_ans,       "w")  {  |f|  f.write  "#{yes_option}"       }
-    File.open($newbie_fail,      "w")  {  |f|  f.write  "#{no_options.join("  ")}"  }
-    File.open($newbie_ans_msg,   "w")  {  |f|  f.write  "#{yes_msg}"          }
-    File.open($newbie_fail_msg,  "w")  {  |f|  f.write  "#{mess_msg}"         }
-    File.open($newbie_answered,  "w")  {  |f|  f.write  "n"                   }
+      File.open($newbie_ans,       "w")  {  |f|  f.write  "#{yes_option}"       }
+      File.open($newbie_fail,      "w")  {  |f|  f.write  "#{no_options.join("  ")}"  }
+      File.open($newbie_ans_msg,   "w")  {  |f|  f.write  "#{yes_msg}"          }
+      File.open($newbie_fail_msg,  "w")  {  |f|  f.write  "#{mess_msg}"         }
+      File.open($newbie_answered,  "w")  {  |f|  f.write  "n"                   }
 
-    script.unlock
+      script.unlock
 
-    # ----------------------------------------------------------
-    # display extracted discord input
-    # ----------------------------------------------------------
-    display_msg =  "CORRECT OPTION: #{yes_option}\n"
-    display_msg += "WRONG OPTIONS: #{no_options.join(" ")}\n\n"
-    display_msg += "Correct Message: #{yes_msg}\n"
-    display_msg += "Wrong Message: #{mess_msg}\n"
+      # ----------------------------------------------------------
+      # display extracted discord input
+      # ----------------------------------------------------------
+      display_msg =  "CORRECT OPTION: #{yes_option}\n"
+      display_msg += "WRONG OPTIONS: #{no_options.join(" ")}\n\n"
+      display_msg += "Correct Message: #{yes_msg}\n"
+      display_msg += "Wrong Message: #{mess_msg}\n"
 
-    # _event.respond "#{_event.channel.name}: #{args.join(' ')}"
-    _event.respond display_msg
+      # _event.respond "#{_event.channel.name}: #{args.join(' ')}"
+      _event.respond display_msg
 
 
-    # ----------------------------------------------------------
-    # register messege event by forking message.rb
-    # ----------------------------------------------------------
-    message_event = File.dirname(__FILE__) + "/message.rb"
+      # ----------------------------------------------------------
+      # register messege event by forking message.rb
+      # ----------------------------------------------------------
+      message_event = File.dirname(__FILE__) + "/message.rb"
 
-    if File.file?($newbie_pid)
-      message_pid = File.read($newbie_pid)
-      res = spawn("/usr/bin/kill  #{message_pid}")
+      if File.file?($newbie_pid)
+        message_pid = File.read($newbie_pid)
+        res = spawn("/usr/bin/kill  #{message_pid}")
+      end
+
+      res = spawn("#{message_event}")
+
     end
-
-    res = spawn("#{message_event}")
-
   end
 end
 
 # --- command: get_status ---
 bot.command :get_status do |event|
-  if $command_channels.include? event.channel.name
-    display_msg = "Nothing happened here..."
+  if $activated_servers.include? event.server.name
+    if $command_channels.include? event.channel.name
+      display_msg = "Nothing happened here..."
 
-    if File.file?($newbie_answered)
-      # ----------------------------------------------------------
-      # Fetch info from dat files
-      # ----------------------------------------------------------
-      newbie_ans      = File.read($newbie_ans)
-      newbie_fail     = File.read($newbie_fail)
-      newbie_ans_msg  = File.read($newbie_ans_msg)
-      newbie_fail_msg = File.read($newbie_fail_msg)
+      if File.file?($newbie_answered)
+        # ----------------------------------------------------------
+        # Fetch info from dat files
+        # ----------------------------------------------------------
+        newbie_ans      = File.read($newbie_ans)
+        newbie_fail     = File.read($newbie_fail)
+        newbie_ans_msg  = File.read($newbie_ans_msg)
+        newbie_fail_msg = File.read($newbie_fail_msg)
 
-      newbie_answered = File.read($newbie_answered)
+        newbie_answered = File.read($newbie_answered)
 
-      # ----------------------------------------------------------
-      # display extracted discord input
-      # ----------------------------------------------------------
-      display_msg =  "Correct Option: #{newbie_ans}\n"
-      display_msg += "Wrong Options: #{newbie_fail}\n\n"
-      display_msg += "Correct Message: #{newbie_ans_msg}\n"
-      display_msg += "Wrong Message: #{newbie_fail_msg}\n\n"
-      display_msg += "Answer is used: #{newbie_answered}\n"
+        # ----------------------------------------------------------
+        # display extracted discord input
+        # ----------------------------------------------------------
+        display_msg =  "Correct Option: #{newbie_ans}\n"
+        display_msg += "Wrong Options: #{newbie_fail}\n\n"
+        display_msg += "Correct Message: #{newbie_ans_msg}\n"
+        display_msg += "Wrong Message: #{newbie_fail_msg}\n\n"
+        display_msg += "Answer is used: #{newbie_answered}\n"
+      end
+
+      event.respond display_msg
     end
-
-    event.respond display_msg
   end
 end
 

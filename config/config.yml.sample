@@ -1,10 +1,24 @@
+# -------------------------------------
+#               Info
+# -------------------------------------
 # Invite URL
 # 3072: only read / send messages permission
 # https://discord.com/oauth2/authorize?client_id={application-id}&scope=bot&permissions=3072
 
-# BOT token
+# -------------------------------------
+#             BOT token
+# -------------------------------------
 bot_token: 999999999999999999
 
-# Restrictions
+# -------------------------------------
+#           Restrictions
+# -------------------------------------
+# --- activate in servers ---
+
+# activated_servers: [ 'server_name_1', 'server_name_2' ]
+activated_servers: [ 'server_name_1' ]
+
+# --- activate in channels ---
+
 message_channels: [ 'message_autoreply_channel_name', 'command_setting_channel_name' ]
 command_channels: [ 'command_setting_channel_name' ]

@@ -10,6 +10,7 @@ config_file = File.dirname(__FILE__) + "/../config/config.yml"
 configs = YAML.load_file(config_file)
 
 $bot_token = configs['bot_token']
+$activated_servers = configs['activated_servers']
 $message_channels = configs['message_channels']
 $command_channels = configs['command_channels']
 
