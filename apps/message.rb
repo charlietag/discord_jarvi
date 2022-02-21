@@ -45,23 +45,25 @@ bot = Discordrb::Bot.new token: $bot_token
 # bot.message(with_text: /[^#{newbie_fail}]*(#{newbie_ans})+[^#{newbie_fail}]*/i) do |event|
 
 bot.message(with_text: /(?:(?!#{newbie_fail}).)*(#{newbie_ans})+(?:(?!#{newbie_fail}).)*/i) do |event|
-  if $activated_servers.include? event.server.name
-    if $command_channels.include? event.channel.name
+  if not event.message.content.match?(/^\/(get_status|help|set_ans)/)
+    if $activated_servers.include? event.server.name
+      if $command_channels.include? event.channel.name
 
-      # ---------------------------------------------
-      # show only when correct answer is not been chosen
-      # ---------------------------------------------
-      if newbie_answered != 'y'
-        event.respond newbie_ans_msg
+        # ---------------------------------------------
+        # show only when correct answer is not been chosen
+        # ---------------------------------------------
+        if newbie_answered != 'y'
+          event.respond newbie_ans_msg
 
 
-        # --- mark as answered, and reload the variable ---
-        script.lock
-        File.open($newbie_answered,"w")  {  |f|  f.write  "y"  }
-        newbie_answered = File.read($newbie_answered)
-        script.unlock
+          # --- mark as answered, and reload the variable ---
+          script.lock
+          File.open($newbie_answered,"w")  {  |f|  f.write  "y"  }
+          newbie_answered = File.read($newbie_answered)
+          script.unlock
+        end
+
       end
-
     end
   end
 end
@@ -69,16 +71,19 @@ end
 # ------------
 # correct
 # ------------
-bot.message(with_text: /(.*(#{newbie_fail})+.*){2,}/i) do |event|
-  if $activated_servers.include? event.server.name
-    if $command_channels.include? event.channel.name
-      # ---------------------------------------------
-      # show only when correct answer is not been chosen
-      # ---------------------------------------------
-      if newbie_answered != 'y'
-        event.respond newbie_fail_msg
-      end
+# bot.message(with_text: /(.*(#{newbie_fail})+.*){2,}/i) do |event|
+bot.message(with_text: /(.*(#{newbie_fail})+.*){1,}/i) do |event|
+  if not event.message.content.match?(/^\/(get_status|help|set_ans)/)
+    if $activated_servers.include? event.server.name
+      if $command_channels.include? event.channel.name
+        # ---------------------------------------------
+        # show only when correct answer is not been chosen
+        # ---------------------------------------------
+        if newbie_answered != 'y'
+          event.respond newbie_fail_msg
+        end
 
+      end
     end
   end
 end

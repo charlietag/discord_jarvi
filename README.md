@@ -100,7 +100,7 @@ Type commands in discord chat channel. And only 3 commands here
   * Match correct_option more than once, **no wrong_options** included
   * case insensitive
 * Fail
-  * Match wrong_options more than twice, even correct_option is included
+  * Match wrong_options more than once, even correct_option is included
 * No response
   * Does not match correct_option
   * Only match wrong_options once
