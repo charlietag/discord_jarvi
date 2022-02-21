@@ -45,9 +45,13 @@ bot = Discordrb::Bot.new token: $bot_token
 # bot.message(with_text: /[^#{newbie_fail}]*(#{newbie_ans})+[^#{newbie_fail}]*/i) do |event|
 
 bot.message(with_text: /(?:(?!#{newbie_fail}).)*(#{newbie_ans})+(?:(?!#{newbie_fail}).)*/i) do |event|
-  if not event.message.content.match?(/^\/(get_status|help|set_ans)/)
+  p event.message.content
+  p "^\/(#{$skip_commands.join('|')})"
+  p event.message.content.match?(/^\/(#{$skip_commands.join('|')})/)
+
+  if not event.message.content.match?(/^\/(#{$skip_commands.join('|')})/)
     if $activated_servers.include? event.server.name
-      if $command_channels.include? event.channel.name
+      if $message_channels.include? event.channel.name
 
         # ---------------------------------------------
         # show only when correct answer is not been chosen
@@ -73,9 +77,10 @@ end
 # ------------
 # bot.message(with_text: /(.*(#{newbie_fail})+.*){2,}/i) do |event|
 bot.message(with_text: /(.*(#{newbie_fail})+.*){1,}/i) do |event|
-  if not event.message.content.match?(/^\/(get_status|help|set_ans)/)
+  p event.message.content.match?(/^\/(#{$skip_commands.join('|')})/)
+  if not event.message.content.match?(/^\/(#{$skip_commands.join('|')})/)
     if $activated_servers.include? event.server.name
-      if $command_channels.include? event.channel.name
+      if $message_channels.include? event.channel.name
         # ---------------------------------------------
         # show only when correct answer is not been chosen
         # ---------------------------------------------

@@ -16,17 +16,22 @@ script = Filelock.new
 #-----------------------------
 # show help
 #-----------------------------
-def print_help
-  message = "------------- Usage -------------\n"
-  message += %{ /set_ans "e a b c d"   "Correct MSG: Congras! the answer is e"   "Fail MSG: Sorry, you are just trying blind guess..."\n\n }
-  message += %{ e(correct)\n  a(wrong)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n\n }
-  message += %{ Correct MSG: Congras! the answer is e\n }
-  message += %{ Fail MSG: Sorry, you are just trying blind guess...\n }
-  message += "--------------------------------\n"
-  message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
-  message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
-  message += "------------- Usage ------------\n"
-end
+# def print_help
+#   message = "------------- Usage -------------\n"
+#   message += %{ /set_ans "e a b c d"   "Correct MSG: Congras! the answer is e"   "Fail MSG: Sorry, you are just trying blind guess..."\n\n }
+#   message += %{ e(correct)\n  a(wrong)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n\n }
+#   message += %{ Correct MSG: Congras! the answer is e\n }
+#   message += %{ Fail MSG: Sorry, you are just trying blind guess...\n }
+#   message += "--------------------------------\n"
+#   message += %{ Activated Server: #{$activated_servers.join(" ")} \n }
+#   message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
+#   message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
+#   message += "--------------------------------\n"
+#   message += %{ You are in :  \n }
+#   message += %{ Server: #{event.server.name} \n }
+#   message += %{ Channel: #{event.channel.name} \n }
+#   message += "------------- Usage ------------\n"
+# end
 
 #-----------------------------
 # define command
@@ -63,7 +68,24 @@ bot = Discordrb::Commands::CommandBot.new token: $bot_token, prefix: '/'
 bot.command :help do |event|
   if $activated_servers.include? event.server.name
     if $command_channels.include? event.channel.name
-      event.respond print_help
+      # event.respond print_help
+      message = "------------- Usage -------------\n"
+      message += %{ /set_ans "e a b c d"   "Correct MSG: Congras! the answer is e"   "Fail MSG: Sorry, you are just trying blind guess..."\n\n }
+      message += %{ e(correct)\n  a(wrong)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n\n }
+      message += %{ Correct MSG: Congras! the answer is e\n }
+      message += %{ Fail MSG: Sorry, you are just trying blind guess...\n }
+      message += "--------------------------------\n"
+      message += %{ Activated Server: #{$activated_servers.join(" ")} \n }
+      message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
+      message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
+      message += "--------------------------------\n"
+      message += %{ You are in :  \n }
+      message += %{ Server: #{event.server.name} \n }
+      message += %{ Channel: #{event.channel.name} \n }
+      message += "------------- Usage ------------\n"
+
+      event.respond message
+
     end
   end
 end

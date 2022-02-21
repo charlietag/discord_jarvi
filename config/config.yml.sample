@@ -22,3 +22,8 @@ activated_servers: [ 'server_name_1' ]
 
 message_channels: [ 'message_autoreply_channel_name', 'command_setting_channel_name' ]
 command_channels: [ 'command_setting_channel_name' ]
+
+
+# --- skip commands ---
+# avoid message detection checks commands
+skip_commands: [ 'help', 'set_ans', 'get_status' ]

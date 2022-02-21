@@ -14,6 +14,8 @@ $activated_servers = configs['activated_servers']
 $message_channels = configs['message_channels']
 $command_channels = configs['command_channels']
 
+$skip_commands = configs['skip_commands']
+
 #-----------------------------
 # Setup Filenames
 #-----------------------------
