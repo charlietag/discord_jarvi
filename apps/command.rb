@@ -73,7 +73,7 @@ bot.command :set_ans do |_event, *args|
 
   if ($activated_servers.include? server_name and $command_channels.include? channel_name) or (! pm_channel_name.nil? and $command_use_pm_channel == 'y')
 
-    # owner_user = File.file?($owner_user) ? File.read($owner_user) : nil
+    owner_user = File.file?($owner_user) ? File.read($owner_user) : nil
     newbie_answered = File.file?($newbie_answered) ? File.read($newbie_answered) : nil
 
     if newbie_answered == 'y' or newbie_answered.nil?
@@ -128,7 +128,7 @@ bot.command :set_ans do |_event, *args|
 
       # ---------------------------------------------------------
     else
-      display_msg = "The quiz is set by @#{_event.user.name}.   And it's quiz is not finished yet.\n"
+      display_msg = "The quiz is set by @#{owner_user}.   And it's quiz is not finished yet.\n"
       display_msg += "Or you can use /clear to clear this quiz!\n"
     end
 
