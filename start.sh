@@ -1,3 +1,4 @@
 #!/bin/bash
 
-./apps/command.rb
+# ./apps/command.rb
+foreman start
