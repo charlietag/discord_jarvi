@@ -28,6 +28,7 @@ end
 #-----------------------------
 bot = Discordrb::Bot.new token: $bot_token
 
+CUSTOM_OUTPUT_LOGGER = Discordrb::Logger.new(ENV['DISCORDRB_FANCY_LOG'])
 
 bot.message(with_text: /.*/) do |event|
   pm_channel_name = defined?(event.user.channel.name) ? event.user.channel.name : nil
@@ -47,7 +48,10 @@ bot.message(with_text: /.*/) do |event|
         newbie_answered = File.read($newbie_answered)
 
         # show on console for debug
-        puts "#{newbie_fail}"
+        # puts "#{newbie_fail}"
+
+        # To puts log on console using foreman
+        CUSTOM_OUTPUT_LOGGER.info("#{newbie_fail}")
 
         # ---------------------------------------------
         # show only when correct answer is not been chosen
