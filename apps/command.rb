@@ -1,4 +1,3 @@
-#!/bin/env ruby
 require_relative '../libs/discord_jarvis.rb'
 
 
@@ -14,87 +13,70 @@ script = Filelock.new
 # script.unlock
 
 #-----------------------------
-# show help
-#-----------------------------
-# def print_help
-#   message = "------------- Usage -------------\n"
-#   message += %{ /set_ans "e a b c d"   "Correct MSG: Congras! the answer is e"   "Fail MSG: Sorry, you are just trying blind guess..."\n\n }
-#   message += %{ e(correct)\n  a(wrong)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n\n }
-#   message += %{ Correct MSG: Congras! the answer is e\n }
-#   message += %{ Fail MSG: Sorry, you are just trying blind guess...\n }
-#   message += "--------------------------------\n"
-#   message += %{ Activated Server: #{$activated_servers.join(" ")} \n }
-#   message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
-#   message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
-#   message += "--------------------------------\n"
-#   message += %{ You are in :  \n }
-#   message += %{ Server: #{event.server.name} \n }
-#   message += %{ Channel: #{event.channel.name} \n }
-#   message += "------------- Usage ------------\n"
-# end
-
-#-----------------------------
 # define command
 #-----------------------------
 bot = Discordrb::Commands::CommandBot.new token: $bot_token, prefix: '/'
 
 # ---------- Sample ---------
-# bot.command :user do |event|
-#   if $activated_servers.include? event.server.name
-#     if $command_channels.include? event.channel.name
-#       event.user.name
-#     end
-#   end
-# end
-#
-# bot.command :channel do |event|
-#   if $activated_servers.include? event.server.name
-#     if $command_channels.include? event.channel.name
-#       event.channel.name
-#     end
-#   end
-# end
-#
-# bot.command :server do |event|
-#   if $activated_servers.include? event.server.name
-#     if $command_channels.include? event.channel.name
-#       event.server.name
-#     end
-#   end
-# end
+# event.user.name
+# event.channel.name
+# event.server.name
 # ---------- Sample ---------
 
 # --- command: help ---
 bot.command :help do |event|
-  if $activated_servers.include? event.server.name
-    if $command_channels.include? event.channel.name
-      # event.respond print_help
-      message = "------------- Usage -------------\n"
-      message += %{ /set_ans "e a b c d"   "Correct MSG: Congras! the answer is e"   "Fail MSG: Sorry, you are just trying blind guess..."\n\n }
-      message += %{ e(correct)\n  a(wrong)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n\n }
-      message += %{ Correct MSG: Congras! the answer is e\n }
-      message += %{ Fail MSG: Sorry, you are just trying blind guess...\n }
-      message += "--------------------------------\n"
-      message += %{ Activated Server: #{$activated_servers.join(" ")} \n }
-      message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
-      message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
-      message += "--------------------------------\n"
-      message += %{ You are in :  \n }
-      message += %{ Server: #{event.server.name} \n }
-      message += %{ Channel: #{event.channel.name} \n }
-      message += "------------- Usage ------------\n"
+  pm_channel_name = defined?(event.user.channel.name) ? event.user.channel.name : nil
+  server_name = defined?(event.server.name) ? event.server.name : nil
+  channel_name = defined?(event.channel.name) ? event.channel.name : nil
 
-      event.respond message
+  if ($activated_servers.include? server_name and $command_channels.include? channel_name) or (! pm_channel_name.nil? and $command_use_pm_channel == 'y')
+    # event.respond print_help
+    message = "-----------------------------------------\n"
+    message += "              Usage \n"
+    message += "-----------------------------------------\n"
+    message += %{ /set_ans "e a b c d"   "Correct MSG: Congras! the answer is e"   "Fail MSG: Sorry, you are just trying blind guess..."\n\n }
+    message += %{ e(correct)\n  a(wrong)\n  b(wrong)\n  c(wrong)\n  d(wrong)\n\n }
+    message += %{ Correct MSG: Congras! the answer is e\n }
+    message += %{ Fail MSG: Sorry, you are just trying blind guess...\n }
+    message += "\n"
+    message += "-----------------------------------------\n"
+    message += "              Info \n"
+    message += "-----------------------------------------\n"
+    message += %{ Activated Server: #{$activated_servers.join(" ")} \n }
+    message += %{ COMMAND Channel: #{$command_channels.join(" ")} \n }
+    message += %{ MESSAGE Channel: #{$message_channels.join(" ")} \n }
+    message += "\n"
+    message += %{ You are in :  \n }
+    message += %{ Server: #{server_name} \n }
+    message += %{ Channel: #{channel_name if pm_channel_name.nil?} \n }
+    message += %{ Private Channel: #{pm_channel_name.nil? ? 'n' : 'y'} \n }
+    message += "\n"
+    message += "-----------------------------------------\n"
+    message += "             Commands \n"
+    message += "-----------------------------------------\n"
+    message += "/set_ans\n"
+    message += "/get_status\n"
+    message += "/help\n"
+    message += "/clear\n"
+    message += "-----------------------------------------\n"
 
-    end
+    event.respond message
+
   end
 end
 
 # --- command: set_ans ---
 bot.command :set_ans do |_event, *args|
-  if $activated_servers.include? _event.server.name
-    if $command_channels.include? _event.channel.name
+  pm_channel_name = defined?(_event.user.channel.name) ? _event.user.channel.name : nil
+  server_name = defined?(_event.server.name) ? _event.server.name : nil
+  channel_name = defined?(_event.channel.name) ? _event.channel.name : nil
 
+  if ($activated_servers.include? server_name and $command_channels.include? channel_name) or (! pm_channel_name.nil? and $command_use_pm_channel == 'y')
+
+    # owner_user = File.file?($owner_user) ? File.read($owner_user) : nil
+    newbie_answered = File.file?($newbie_answered) ? File.read($newbie_answered) : nil
+
+    if newbie_answered == 'y' or newbie_answered.nil?
       # ----------------------------------------------------------
       # extract discord input
       # ----------------------------------------------------------
@@ -117,7 +99,8 @@ bot.command :set_ans do |_event, *args|
       File.open($newbie_fail,      "w")  {  |f|  f.write  "#{no_options.join("  ")}"  }
       File.open($newbie_ans_msg,   "w")  {  |f|  f.write  "#{yes_msg}"          }
       File.open($newbie_fail_msg,  "w")  {  |f|  f.write  "#{mess_msg}"         }
-      File.open($newbie_answered,  "w")  {  |f|  f.write  "n"                   }
+      File.open($newbie_answered,  "w")  {  |f|  f.write  "n"  }
+      File.open($owner_user,       "w")  {  |f|  f.write  "#{_event.user.name}"   }
 
       script.unlock
 
@@ -130,31 +113,42 @@ bot.command :set_ans do |_event, *args|
       display_msg += "Wrong Message: #{mess_msg}\n"
 
       # _event.respond "#{_event.channel.name}: #{args.join(' ')}"
-      _event.respond display_msg
-
 
       # ----------------------------------------------------------
       # register messege event by forking message.rb
       # ----------------------------------------------------------
-      message_event = File.dirname(__FILE__) + "/message.rb"
+      # message_event = File.dirname(__FILE__) + "/message.rb"
+      #
+      # if File.file?($newbie_pid)
+      #   message_pid = File.read($newbie_pid)
+      #   res = spawn("/usr/bin/kill  #{message_pid}")
+      # end
+      #
+      # res = spawn("#{message_event}")
 
-      if File.file?($newbie_pid)
-        message_pid = File.read($newbie_pid)
-        res = spawn("/usr/bin/kill  #{message_pid}")
-      end
-
-      res = spawn("#{message_event}")
-
+      # ---------------------------------------------------------
+    else
+      display_msg = "The quiz is set by @#{_event.user.name}.   And it's quiz is not finished yet.\n"
+      display_msg += "Or you can use /clear to clear this quiz!\n"
     end
+
+    _event.respond display_msg
   end
+
 end
 
 # --- command: get_status ---
 bot.command :get_status do |event|
-  if $activated_servers.include? event.server.name
-    if $command_channels.include? event.channel.name
-      display_msg = "Nothing happened here..."
+  pm_channel_name = defined?(event.user.channel.name) ? event.user.channel.name : nil
+  server_name = defined?(event.server.name) ? event.server.name : nil
+  channel_name = defined?(event.channel.name) ? event.channel.name : nil
 
+  if ($activated_servers.include? server_name and $command_channels.include? channel_name) or (! pm_channel_name.nil? and $command_use_pm_channel == 'y')
+    display_msg = nil
+
+    owner_user = File.file?($owner_user) ? File.read($owner_user) : nil
+
+    if owner_user == event.user.name
       if File.file?($newbie_answered)
         # ----------------------------------------------------------
         # Fetch info from dat files
@@ -176,9 +170,30 @@ bot.command :get_status do |event|
         display_msg += "Answer is used: #{newbie_answered}\n"
       end
 
-      event.respond display_msg
+    else
+
+      display_msg = "You should ask @#{owner_user} for the answer"
+
     end
+
+
+    event.respond display_msg
   end
 end
+
+
+# --- command: clear ---
+bot.command :clear do |event|
+  pm_channel_name = defined?(event.user.channel.name) ? event.user.channel.name : nil
+  server_name = defined?(event.server.name) ? event.server.name : nil
+  channel_name = defined?(event.channel.name) ? event.channel.name : nil
+
+  if ($activated_servers.include? server_name and $command_channels.include? channel_name) or (! pm_channel_name.nil? and $command_use_pm_channel == 'y')
+
+    File.open($newbie_answered,  "w")  {  |f|  f.write  "y"  }
+    event.respond "all clear!! You can setup a new answer now!"
+  end
+end
+
 
 bot.run
