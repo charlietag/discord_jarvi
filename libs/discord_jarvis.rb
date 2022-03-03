@@ -16,6 +16,9 @@ $command_channels = configs['command_channels']
 
 $skip_commands = configs['skip_commands']
 
+
+$command_use_pm_channel = configs['command_use_pm_channel']
+
 #-----------------------------
 # Setup Filenames
 #-----------------------------
@@ -31,3 +34,5 @@ $newbie_fail_msg = "#{tmp_dir}/#{prefix}_fail_msg.dat"
 $newbie_pid      = "#{tmp_dir}/#{prefix}_pid.dat"
 
 $newbie_answered = "#{tmp_dir}/#{prefix}_answered.dat"
+
+$owner_user = "#{tmp_dir}/#{prefix}_owner_user.dat"
