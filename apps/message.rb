@@ -68,7 +68,7 @@ bot.message(with_text: /.*/) do |event|
           # bot.message(with_text: /[^#{newbie_fail}]*(#{newbie_ans})+[^#{newbie_fail}]*/i) do |event|
 
           # correct_regex= %{ /(?:(?!^\/(#{$skip_commands.join('|')})))(?:(?!#{newbie_fail}).)*(#{newbie_ans})+(?:(?!#{newbie_fail}).)*/i }
-          correct_regex= %{(?:(?!^/(#{$skip_commands.join('|')})))(?:(?!#{newbie_fail}).)*(#{newbie_ans})+(?:(?!#{newbie_fail}).)*}
+          correct_regex= %{(?:(?!^\/(#{$skip_commands.join('|')})))(?:(?!#{newbie_fail}).)*(#{newbie_ans})+(?:(?!#{newbie_fail}).)*}
 
           match = /#{correct_regex}/i.match(event.message.content)
           check_content = match ? (event.message.content == match[0]) : false
