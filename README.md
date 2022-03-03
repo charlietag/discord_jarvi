@@ -53,6 +53,13 @@ Setup the config
 $ vim config/config.yml
 
 # -------------------------------------
+#               Info
+# -------------------------------------
+# Invite URL
+# 3072: only read / send messages permission
+# https://discord.com/oauth2/authorize?client_id={application-id}&scope=bot&permissions=3072
+
+# -------------------------------------
 #             BOT token
 # -------------------------------------
 bot_token: 999999999999999999
@@ -69,6 +76,14 @@ activated_servers: [ 'server_name_1' ]
 
 message_channels: [ 'message_autoreply_channel_name', 'command_setting_channel_name' ]
 command_channels: [ 'command_setting_channel_name' ]
+
+# y | n
+command_use_pm_channel: 'n'
+
+
+# --- skip commands ---
+# avoid message detection checks commands
+skip_commands: [ 'help', 'set_ans', 'get_status', 'clear' ]
 ```
 
 Run the discord bot
@@ -87,6 +102,7 @@ Type commands in discord chat channel. And only 3 commands here
 
 `/get_status` - Get the setting and using status
 
+`/clear`      - Clear setting , then `/set_ans` is allowed after this
 
 **Usage of `/set_ans`**
 
