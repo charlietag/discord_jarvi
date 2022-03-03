@@ -128,8 +128,8 @@ bot.command :set_ans do |_event, *args|
 
       # ---------------------------------------------------------
     else
-      display_msg = "The quiz is set by @#{owner_user}.   And it's quiz is not finished yet.\n"
-      display_msg += "Or you can use /clear to clear this quiz!\n"
+      display_msg = "The quiz is set by @#{owner_user}.   And it is not finished yet.\n"
+      display_msg += "Or you can force to /clear this quiz! And set your own quiz!\n"
     end
 
     _event.respond display_msg
@@ -172,7 +172,14 @@ bot.command :get_status do |event|
 
     else
 
-      display_msg = "You should ask @#{owner_user} for the answer"
+      newbie_answered = File.file?($newbie_answered) ? File.read($newbie_answered) : nil
+
+      if newbie_answered == 'y'
+        display_msg = "Try /set_ans to start a new quiz! (for full usage /help)"
+      else
+        display_msg = "You should ask @#{owner_user} for the answer"
+
+      end
 
     end
 
