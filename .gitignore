@@ -1,3 +1,4 @@
 *.yml
 *.dat
 *.swp
+Gemfile.lock
